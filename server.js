@@ -1,18 +1,33 @@
 const express = require('express');
+const hbs = require('hbs');
 
 const app = express();
 
+hbs.registerPartials(__dirname + '/views/partials');
+app.set('view engine', 'hbs');
 app.use(express.static(__dirname + '/public'));
 
+hbs.registerHelper('getCurrentYear', () => {
+  return new Date().getFullYear();
+});
+
+hbs.registerHelper('screamIt', (text) => {
+  return text.toUpperCase();
+});
+
 app.get('/', (req, res) => {
-  // res.send('<h1>Hello Express!</h1>');
-  res.send({
-    name: 'Pedro',
-    surname: 'Pauleta'
+  res.render('home.hbs', {
+    siteName: 'Garganzola',
+    pageTitle: 'This is a home page',
+    welcomeMessage: 'Hello'
   });
 });
 app.get('/about', (req, res) => {
-  res.send('About Page');
+  res.render('about.hbs', {
+    siteName: 'Garganzola',
+    pageTitle: 'About Page',
+    welcomeMessage: 'Hello'
+  });
 });
 app.get('/bad', (req, res) => {
   res.send('Error handling request');
